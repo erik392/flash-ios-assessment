@@ -60,3 +60,18 @@ fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots/**/*.png
 fastlane/test_output
+
+# macOS system files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Thumbnails
+._*
+
+# Files that might appear on external drives
+.Spotlight-V100
+.Trashes
+
+# macOS Finder metadata
+Icon?
