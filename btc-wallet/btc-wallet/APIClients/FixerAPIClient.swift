@@ -27,7 +27,7 @@ final class FixerAPIClient: FixerClient {
             URLQueryItem(name: "symbols", value: symbols.joined(separator: "%2C"))
         ]
 
-        return try await networkManager.fetchRequest(url: components?.url, headers: ["apikey" : "xfuV0flTkOkoilScEKNGJzxMyLbRVAYa"])
+        return try await networkManager.fetchRequest(url: components?.url, headers: ["apikey" : "xfuV0flTkOkoilScEKNGJzxMyLbRVAYa"], errorType: FixerAPIErrorResponse.self)
     }
     
     func getExchangeFluctuations(base: String, symbols: [String], fromDate: Date, toDate: Date) async throws -> ExchangeFluctuationsResponse {
@@ -41,6 +41,6 @@ final class FixerAPIClient: FixerClient {
             URLQueryItem(name: "end_date", value: toDate.formatForAPI())
         ]
 
-        return try await networkManager.fetchRequest(url: components?.url, headers: ["apikey" : "xfuV0flTkOkoilScEKNGJzxMyLbRVAYa"])
+        return try await networkManager.fetchRequest(url: components?.url, headers: ["apikey" : "xfuV0flTkOkoilScEKNGJzxMyLbRVAYa"], errorType: FixerAPIErrorResponse.self)
     }
 }
