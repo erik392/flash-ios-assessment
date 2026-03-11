@@ -7,7 +7,14 @@
 
 import Foundation
 
-final class FixerAPIClient {
+protocol FixerClient {
+    
+    func getExchangeRates(base: String, symbols: [String]) async throws -> ExchangeRatesResponse
+    func getExchangeFluctuations(base: String, symbols: [String], fromDate: Date, toDate: Date) async throws -> ExchangeFluctuationsResponse
+    
+}
+
+final class FixerAPIClient: FixerClient {
 
     private let networkManager = NetworkManager()
 
