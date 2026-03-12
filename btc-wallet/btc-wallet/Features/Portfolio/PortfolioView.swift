@@ -10,7 +10,7 @@ import CoreData
 
 struct PortfolioView: View {
     
-    @StateObject private var viewModel = PortfolioViewModel(apiClient: FixerAPIClient())
+    @StateObject var viewModel: PortfolioViewModel
     
     var body: some View {
         NavigationView {
@@ -71,10 +71,14 @@ struct PortfolioView: View {
                     }
                 }
             }
+            .onAppear {
+                viewModel.loadBTC()
+            }
         }
     }
 }
 
-#Preview {
-    PortfolioView()
-}
+// TODO: - Fix Preview
+//#Preview {
+//    PortfolioView()
+//}
