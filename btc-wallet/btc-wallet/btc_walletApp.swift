@@ -14,7 +14,7 @@ struct btc_walletApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            PortfolioView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
     }
