@@ -17,22 +17,34 @@ struct PortfolioView: View {
             VStack(spacing: 16) {
                 HStack {
                     Text("BTC")
-                        .font(.headline)
+                        .fontWeight(.medium)
+                    Spacer()
                     TextField("Amount", text: $viewModel.btcAmount)
                         .keyboardType(.decimalPad)
+                        .multilineTextAlignment(.trailing)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .frame(width: 100)
                 }
                 .padding(.horizontal)
+                .padding(.vertical, 16)
                 
-                List(viewModel.exchangeRates, id: \.currency) { rate in
+                Divider()
+                
+                List(viewModel.portfolioItems, id: \.currency) { rate in
                     HStack {
                         Text(rate.currency ?? "")
                             .fontWeight(.medium)
                         Spacer()
-                        Text("\(rate.exchangeRate ?? 0.0, specifier: "%.2f")")
+                        Text("\(rate.currencyValue ?? 0.0, specifier: "%.2f")")
                     }
                     .padding(.vertical, 4)
                 }
+                
+                Divider()
+                
+                Text(viewModel.lastUpdated)
+                    .fontWeight(.medium)
+                
             }
             .navigationTitle("Portfolio")
             .toolbar {

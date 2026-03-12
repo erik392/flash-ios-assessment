@@ -27,10 +27,16 @@ class PortfolioViewModel: ObservableObject {
         return "Last Updated: \(lastUpdated.formatForUI())"
     }
     
-    var exchangeRates: [ExchangeRateModel] {
-        return exchangeInfo?.rates.sorted {
-            ($0.currency ?? "") < ($1.currency ?? "")
-        } ?? []
+    var portfolioItems: [PorfolioItemInfoModel] {
+        guard let exchangeInfo,
+              let btcValue = Double(btcAmount)
+        else {
+            return []
+        }
+        
+        return exchangeInfo.rates
+            .map { PorfolioItemInfoModel(exchangeInfo: $0, btcValue: btcValue) }
+            .sorted { ($0.currency ?? "") < ($1.currency ?? "") }
     }
     
     func fetchCurrencyValues() async {
