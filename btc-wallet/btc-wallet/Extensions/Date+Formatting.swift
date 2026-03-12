@@ -1,5 +1,5 @@
 //
-//  Date+APIFormatter.swift
+//  Date+Formatting.swift
 //  btc-wallet
 //
 //  Created by Erik Egers on 2026/03/11.
@@ -16,6 +16,17 @@ extension Date {
                 .month()
                 .day()
                 .dateSeparator(.dash)
+        )
+    }
+    
+    func formatForUI() -> String {
+        self.formatted(
+            .dateTime
+                .year()
+                .month()
+                .day()
+                .hour()
+                .minute()
         )
     }
 }
