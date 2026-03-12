@@ -14,6 +14,7 @@ class PortfolioViewModel: ObservableObject {
     private let apiClient: FixerClient
     private var btcBalance: Double?
     
+    @Published var btcAmount: String = ""
     @Published var exchangeInfo: ExchangeRateInfoModel?
     @Published var errorOcurred: Bool = false
     
@@ -24,6 +25,12 @@ class PortfolioViewModel: ObservableObject {
     var lastUpdated: String {
         guard let lastUpdated = exchangeInfo?.lastUpdated else { return "" }
         return "Last Updated: \(lastUpdated.formatForUI())"
+    }
+    
+    var exchangeRates: [ExchangeRateModel] {
+        return exchangeInfo?.rates.sorted {
+            ($0.currency ?? "") < ($1.currency ?? "")
+        } ?? []
     }
     
     func fetchCurrencyValues() async {
