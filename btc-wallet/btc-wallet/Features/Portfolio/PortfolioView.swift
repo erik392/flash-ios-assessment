@@ -24,6 +24,19 @@ struct PortfolioView: View {
                         .multilineTextAlignment(.trailing)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                         .frame(width: 100)
+                        .onChange(of: viewModel.btcAmount) { newValue in
+                                let filtered = newValue.filter { "0123456789.".contains($0) }
+                                
+                                let decimalCount = filtered.filter { $0 == "." }.count
+                                if decimalCount > 1 {
+                                    let firstIndex = filtered.firstIndex(of: ".")!
+                                    let truncated = filtered.prefix(upTo: filtered.index(after: firstIndex))
+                                        + filtered.suffix(from: filtered.index(after: firstIndex)).replacingOccurrences(of: ".", with: "")
+                                    viewModel.btcAmount = String(truncated)
+                                } else {
+                                    viewModel.btcAmount = filtered
+                                }
+                            }
                 }
                 .padding(.horizontal)
                 .padding(.vertical, 16)
