@@ -13,9 +13,15 @@ struct btc_walletApp: App {
     let persistenceController = PersistenceController.shared
 
     var body: some Scene {
+        let context = persistenceController.container.viewContext
+        let repository = CoreDataPortfolioRepository(context: context)
+        let viewModel = PortfolioViewModel(
+            apiClient: FixerAPIClient(),
+            repository: repository)
+        
         WindowGroup {
-            PortfolioView()
-                .environment(\.managedObjectContext, persistenceController.container.viewContext)
+            PortfolioView(viewModel: viewModel)
+                .environment(\.managedObjectContext, context)
         }
     }
 }

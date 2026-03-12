@@ -12,14 +12,21 @@ import Combine
 class PortfolioViewModel: ObservableObject {
     
     private let apiClient: FixerClient
+    private let repository: PortfolioRepositoryType
     private var btcBalance: Double?
     
-    @Published var btcAmount: String = ""
     @Published var exchangeInfo: ExchangeRateInfoModel?
     @Published var errorOcurred: Bool = false
+    @Published var btcAmount: String = "" {
+        didSet {
+            saveBTC()
+        }
+    }
     
-    init(apiClient: FixerClient) {
+    init(apiClient: FixerClient,
+         repository: PortfolioRepositoryType) {
         self.apiClient = apiClient
+        self.repository = repository
     }
     
     var lastUpdated: String {
@@ -66,6 +73,27 @@ class PortfolioViewModel: ObservableObject {
                 errorOcurred = true
                 print("Error:", error)
             }
+        }
+    }
+    
+    func loadBTC() {
+        do {
+            if let value = try repository.fetchBTCValue() {
+                print("Successful fetch, value: \(value)")
+                btcAmount = String(value)
+            }
+        } catch {
+            print("Failed to fetch BTC value:", error)
+        }
+    }
+
+    private func saveBTC() {
+        guard let value = Double(btcAmount) else { return }
+        do {
+            try repository.saveBTCValue(value)
+            print("Successful save: \(value)")
+        } catch {
+            print("Failed to save BTC value:", error)
         }
     }
 }
