@@ -12,6 +12,7 @@ struct PortfolioView: View {
     
     @StateObject var viewModel: PortfolioViewModel
     @FocusState private var isInputActive: Bool
+    @State private var isLoading = false
     
     var body: some View {
         NavigationView {
@@ -30,9 +31,11 @@ struct PortfolioView: View {
                             ToolbarItemGroup(placement: .keyboard) {
                                 Spacer()
                                 Button("Done") {
+                                    isInputActive = false
                                     Task {
-                                        isInputActive = false
+                                        isLoading = true
                                         await viewModel.fetchCurrencyValues()
+                                        isLoading = false
                                     }
                                 }
                             }
@@ -73,15 +76,25 @@ struct PortfolioView: View {
                 
             }
             .navigationTitle("Portfolio")
+            .overlay {
+                if isLoading {
+                    ProgressView()
+                        .scaleEffect(1.5)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                }
+            }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
                         Task {
+                            isLoading = true
                             await viewModel.fetchCurrencyValues()
+                            isLoading = false
                         }
                     } label: {
                         Image(systemName: "arrow.clockwise")
                     }
+                    .disabled(isLoading)
                 }
             }
             .onAppear {
