@@ -60,13 +60,21 @@ struct PortfolioView: View {
                 Divider()
                 
                 List(viewModel.portfolioItems, id: \.currency) { rate in
-                    HStack {
-                        Text(rate.currency ?? "")
-                            .fontWeight(.medium)
-                        Spacer()
-                        Text("\(rate.currencyValue ?? 0.0, specifier: "%.2f")")
+                    VStack {
+                        HStack {
+                            Text(rate.currency ?? "")
+                                .fontWeight(.medium)
+                            Spacer()
+                            Text("\(rate.currencyValue ?? 0.0, specifier: "%.2f")")
+                        }
+                        .padding(.vertical, 4)
+                        HStack {
+                            Text("Daily change:")
+                            Spacer()
+                            Text("\(rate.currencyChange ?? 0.0) (\(rate.changePercentage ?? 0.0, specifier: "%.2f") %)")
+                                .foregroundColor((rate.currencyChange ?? 0.0) < 0 ? .red : .green)
+                        }
                     }
-                    .padding(.vertical, 4)
                 }
                 
                 Divider()
