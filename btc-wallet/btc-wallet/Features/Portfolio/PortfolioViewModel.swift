@@ -49,11 +49,10 @@ class PortfolioViewModel: ObservableObject {
     func fetchCurrencyValues() async {
         Task {
             do {
-                let fixerClient = FixerAPIClient()
                 let base = "BTC"
                 let symbols = ["ZAR", "USD", "AUD"]
                 
-                let exhangeRates = try await fixerClient.getExchangeRates(
+                let exhangeRates = try await apiClient.getExchangeRates(
                     base: base,
                     symbols: symbols
                 )
@@ -61,7 +60,7 @@ class PortfolioViewModel: ObservableObject {
                 let toDate = Date()
                 let fromDate = toDate.addingTimeInterval(-24*60*60)
                 
-                let exchangeFluctuations = try await fixerClient.getExchangeFluctuations(
+                let exchangeFluctuations = try await apiClient.getExchangeFluctuations(
                     base: base,
                     symbols: symbols,
                     fromDate: fromDate,
