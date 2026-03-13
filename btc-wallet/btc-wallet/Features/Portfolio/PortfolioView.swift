@@ -11,6 +11,7 @@ import CoreData
 struct PortfolioView: View {
     
     @StateObject var viewModel: PortfolioViewModel
+    @FocusState private var isInputActive: Bool
     
     var body: some View {
         NavigationView {
@@ -24,6 +25,18 @@ struct PortfolioView: View {
                         .multilineTextAlignment(.trailing)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                         .frame(width: 100)
+                        .focused($isInputActive)
+                        .toolbar {
+                            ToolbarItemGroup(placement: .keyboard) {
+                                Spacer()
+                                Button("Done") {
+                                    Task {
+                                        isInputActive = false
+                                        await viewModel.fetchCurrencyValues()
+                                    }
+                                }
+                            }
+                        }
                         .onChange(of: viewModel.btcAmount) { newValue in
                                 let filtered = newValue.filter { "0123456789.".contains($0) }
                                 
