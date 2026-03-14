@@ -108,6 +108,16 @@ struct PortfolioView: View {
             .onAppear {
                 viewModel.loadBTC()
             }
+            .alert("Error",
+                   isPresented: Binding(
+                        get: { viewModel.errorMessage != nil },
+                        set: { _ in viewModel.errorMessage = nil }
+                   )
+            ) {
+                Button("OK", role: .cancel) { }
+            } message: {
+                Text(viewModel.errorMessage ?? "Unknown error")
+            }
         }
     }
 }

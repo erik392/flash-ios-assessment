@@ -16,7 +16,7 @@ class PortfolioViewModel: ObservableObject {
     private var btcBalance: Double?
     
     @Published var exchangeInfo: ExchangeRateInfoModel?
-    @Published var errorOcurred: Bool = false
+    @Published var errorMessage: String?
     @Published var btcAmount: String = "" {
         didSet {
             saveBTC()
@@ -69,7 +69,7 @@ class PortfolioViewModel: ObservableObject {
 
                 exchangeInfo = ExchangeRateInfoModel(ratesResponse: exhangeRates, fluctuationsResponse: exchangeFluctuations)
             } catch {
-                errorOcurred = true
+                errorMessage = error.localizedDescription
                 print("Error:", error)
             }
         }
