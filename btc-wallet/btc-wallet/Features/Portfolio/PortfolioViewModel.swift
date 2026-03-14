@@ -19,9 +19,12 @@ class PortfolioViewModel: ObservableObject {
     @Published var errorMessage: String?
     @Published var btcAmount: String = "" {
         didSet {
+//            btcAmount = sanitizeBTCInput(btcAmount)
             saveBTC()
         }
     }
+    @Published var isLoading: Bool = false
+    @Published var showError: Bool = false
     
     init(apiClient: FixerClient,
          repository: PortfolioRepositoryType) {
@@ -47,6 +50,10 @@ class PortfolioViewModel: ObservableObject {
     }
     
     func fetchCurrencyValues() async {
+        guard !isLoading else { return }
+        isLoading = true
+        defer { isLoading = false }
+        
         Task {
             do {
                 let base = "BTC"
@@ -83,6 +90,18 @@ class PortfolioViewModel: ObservableObject {
             }
         } catch {
             print("Failed to fetch BTC value:", error)
+        }
+    }
+    
+    func sanitizeBTCInput(_ value: String) -> String {
+        let filtered = value.filter { "0123456789.".contains($0) }
+        var hasDecimal = false
+        return filtered.filter { char in
+            if char == "." {
+                defer { hasDecimal = true }
+                return !hasDecimal
+            }
+            return true
         }
     }
 
