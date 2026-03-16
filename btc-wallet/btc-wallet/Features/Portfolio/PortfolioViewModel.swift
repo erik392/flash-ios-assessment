@@ -130,7 +130,6 @@ class PortfolioViewModel: ObservableObject {
     private func loadBTC() {
         do {
             if let value = try repository.fetchBTCValue() {
-                print("Successful fetch, value: \(value)")
                 btcAmount = String(value)
             }
         } catch {
@@ -144,7 +143,6 @@ class PortfolioViewModel: ObservableObject {
         guard let value = Double(btcAmount) else { return }
         do {
             try repository.saveBTCValue(value)
-            print("Successful save: \(value)")
         } catch {
             errorMessage = "Failed to save BTC amount. \nPlease try again later."
             showError = true
