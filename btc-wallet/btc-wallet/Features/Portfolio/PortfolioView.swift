@@ -69,6 +69,21 @@ private extension PortfolioView {
                         .disabled(viewModel.isLoading)
                     }
                 }
+                .onChange(of: viewModel.btcAmount) { newValue in
+                    var filtered = newValue.filter { "0123456789.".contains($0) }
+                    
+                    let decimalCount = filtered.filter { $0 == "." }.count
+                    if decimalCount > 1 {
+                        let firstIndex = filtered.firstIndex(of: ".")!
+                        let truncated = filtered.prefix(upTo: filtered.index(after: firstIndex))
+                        + filtered.suffix(from: filtered.index(after: firstIndex)).replacingOccurrences(of: ".", with: "")
+                        filtered = String(truncated)
+                    }
+                    
+                    if filtered != newValue {
+                        viewModel.btcAmount = filtered
+                    }
+                }
         }
         .padding(.horizontal)
         .padding(.vertical, 16)

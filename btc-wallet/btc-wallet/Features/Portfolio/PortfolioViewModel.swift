@@ -21,15 +21,7 @@ class PortfolioViewModel: ObservableObject {
     @Published var showError: Bool = false
     @Published var errorMessage: String?
     @Published var exchangeInfo: ExchangeRateInfoModel?
-    @Published var btcAmount: String = "" {
-        didSet {
-            let filtered = btcAmount.filter { $0.isNumber || $0 == "." }
-            
-            if btcAmount != filtered {
-                btcAmount = filtered
-            }
-        }
-    }
+    @Published var btcAmount: String = ""
     
     // MARK: - Initializer
     init(apiClient: FixerClient,
