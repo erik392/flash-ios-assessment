@@ -44,7 +44,7 @@ struct PortfolioViewModelTests {
         await vm.submitBTC()
         
         #expect(vm.showError == true)
-        #expect(vm.errorMessage != nil)
+        #expect(vm.errorMessage == "Enter a valid amount of BTC")
     }
     
     @Test
@@ -75,6 +75,42 @@ struct PortfolioViewModelTests {
     }
     
     @Test
+    func lastUpdatedReturnsCorrectValue() async {
+        
+        let vm = makeViewModel()
+        
+        vm.btcAmount = "1"
+        
+        await vm.submitBTC()
+        
+        #expect(vm.lastUpdated == "Last Updated: 16 Mar 2026 at 15:56")
+    }
+    
+    @Test
+    func portfolioItemsReturnCorrectValues() async {
+        
+        let vm = makeViewModel()
+        
+        vm.btcAmount = "0.5"
+        
+        await vm.submitBTC()
+        
+        let desired = [
+            PorfolioItemInfoModel(currency: "AUD", currencyValue: 52286.358228, currencyChange: nil, changePercentage: nil),
+            PorfolioItemInfoModel(currency: "USD", currencyValue: 36963.775, currencyChange: nil, changePercentage: nil),
+            PorfolioItemInfoModel(currency: "ZAR", currencyValue: 617984.427016, currencyChange: nil, changePercentage: nil)
+        ]
+        let actual = vm.portfolioItems
+        
+        #expect(desired[0].currency == actual[0].currency)
+        #expect(desired[0].currencyValue == actual[0].currencyValue)
+        #expect(desired[1].currency == actual[1].currency)
+        #expect(desired[1].currencyValue == actual[1].currencyValue)
+        #expect(desired[2].currency == actual[2].currency)
+        #expect(desired[2].currencyValue == actual[2].currencyValue)
+    }
+    
+    @Test
     func apiFailureShowsError() async {
         
         let api = MockFixerClient()
@@ -87,6 +123,7 @@ struct PortfolioViewModelTests {
         await vm.submitBTC()
         
         #expect(vm.showError == true)
+        #expect(vm.errorMessage == "Failed to fetch updated converstion values. \nPlease try again later.")
         #expect(vm.exchangeInfo == nil)
     }
     
