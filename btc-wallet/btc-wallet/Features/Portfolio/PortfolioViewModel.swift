@@ -11,11 +11,16 @@ import Combine
 @MainActor
 class PortfolioViewModel: ObservableObject {
     
+    // MARK: - Dependencies
     private let apiClient: FixerClient
     private let repository: PortfolioRepositoryType
     
-    @Published var exchangeInfo: ExchangeRateInfoModel?
+    // MARK: - Published Properties
+    @Published var isLoading: Bool = false
+    @Published var showLoadingIndicator = false
+    @Published var showError: Bool = false
     @Published var errorMessage: String?
+    @Published var exchangeInfo: ExchangeRateInfoModel?
     @Published var btcAmount: String = "" {
         didSet {
             let filtered = btcAmount.filter { $0.isNumber || $0 == "." }
@@ -25,16 +30,15 @@ class PortfolioViewModel: ObservableObject {
             }
         }
     }
-    @Published var isLoading: Bool = false
-    @Published var showLoadingIndicator = false
-    @Published var showError: Bool = false
     
+    // MARK: - Initializer
     init(apiClient: FixerClient,
          repository: PortfolioRepositoryType) {
         self.apiClient = apiClient
         self.repository = repository
     }
     
+    // MARK: - Computed Properties
     var lastUpdated: String {
         guard let lastUpdated = exchangeInfo?.lastUpdated else { return "" }
         return "Last Updated: \(lastUpdated.formatForUI())"
@@ -52,6 +56,7 @@ class PortfolioViewModel: ObservableObject {
             .sorted { ($0.currency ?? "") < ($1.currency ?? "") }
     }
     
+    // MARK: - Public Methods
     func initialLoadBTC() async {
         loadBTC()
         if let amount = Double(btcAmount), amount != 0 {
@@ -71,6 +76,7 @@ class PortfolioViewModel: ObservableObject {
         await updateBTC(showOverlay: false)
     }
     
+    // MARK: - Private Methods
     private func validateBTC() -> Bool {
         guard !btcAmount.isEmpty,
               btcAmount.first != ".",
