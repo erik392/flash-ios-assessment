@@ -94,31 +94,29 @@ class PortfolioViewModel: ObservableObject {
     }
     
     private func fetchCurrencyValues() async {
-        Task {
-            do {
-                let base = "BTC"
-                let symbols = ["ZAR", "USD", "AUD"]
-                
-                let exhangeRates = try await apiClient.getExchangeRates(
-                    base: base,
-                    symbols: symbols
-                )
-                
-                let toDate = Date()
-                let fromDate = toDate.addingTimeInterval(-24*60*60)
-                
-                let exchangeFluctuations = try await apiClient.getExchangeFluctuations(
-                    base: base,
-                    symbols: symbols,
-                    fromDate: fromDate,
-                    toDate: toDate
-                )
-
-                exchangeInfo = ExchangeRateInfoModel(ratesResponse: exhangeRates, fluctuationsResponse: exchangeFluctuations)
-            } catch {
-                errorMessage = error.localizedDescription
-                print("Error:", error)
-            }
+        do {
+            let base = "BTC"
+            let symbols = ["ZAR", "USD", "AUD"]
+            
+            let exhangeRates = try await apiClient.getExchangeRates(
+                base: base,
+                symbols: symbols
+            )
+            
+            let toDate = Date()
+            let fromDate = toDate.addingTimeInterval(-24*60*60)
+            
+            let exchangeFluctuations = try await apiClient.getExchangeFluctuations(
+                base: base,
+                symbols: symbols,
+                fromDate: fromDate,
+                toDate: toDate
+            )
+            
+            exchangeInfo = ExchangeRateInfoModel(ratesResponse: exhangeRates, fluctuationsResponse: exchangeFluctuations)
+        } catch {
+            errorMessage = error.localizedDescription
+            print("Error:", error)
         }
     }
     
