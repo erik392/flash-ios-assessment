@@ -121,7 +121,8 @@ class PortfolioViewModel: ObservableObject {
             
             exchangeInfo = ExchangeRateInfoModel(ratesResponse: exhangeRates, fluctuationsResponse: exchangeFluctuations)
         } catch {
-            errorMessage = error.localizedDescription
+            errorMessage = "Failed to fetch updated converstion values. \nPlease try again later."
+            showError = true
             print("Error:", error)
         }
     }
@@ -133,6 +134,8 @@ class PortfolioViewModel: ObservableObject {
                 btcAmount = String(value)
             }
         } catch {
+            errorMessage = "Failed to load saved BTC amount. \nPlease try again later."
+            showError = true
             print("Failed to fetch BTC value:", error)
         }
     }
@@ -143,6 +146,8 @@ class PortfolioViewModel: ObservableObject {
             try repository.saveBTCValue(value)
             print("Successful save: \(value)")
         } catch {
+            errorMessage = "Failed to save BTC amount. \nPlease try again later."
+            showError = true
             print("Failed to save BTC value:", error)
         }
     }
