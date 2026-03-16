@@ -11,6 +11,9 @@ struct ExchangeRateInfoModel {
     let base: String
     let lastUpdated: Date
     let rates: [ExchangeRateModel]
+}
+
+extension ExchangeRateInfoModel {
     
     init(ratesResponse: ExchangeRatesResponse, fluctuationsResponse: ExchangeFluctuationsResponse) {
         self.base = ratesResponse.base
