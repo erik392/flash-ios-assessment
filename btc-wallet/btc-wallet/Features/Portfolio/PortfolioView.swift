@@ -125,7 +125,6 @@ private extension PortfolioView {
     }
 }
 
-// TODO: - Fix Preview
-//#Preview {
-//    PortfolioView()
-//}
+#Preview {
+    PortfolioView(viewModel: .preview)
+}

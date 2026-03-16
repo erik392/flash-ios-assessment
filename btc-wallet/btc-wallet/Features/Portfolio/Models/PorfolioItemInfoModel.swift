@@ -7,11 +7,14 @@
 
 import Foundation
 
-struct PorfolioItemInfoModel: Codable {
+struct PorfolioItemInfoModel {
     let currency: String?
     let currencyValue: Double?
     let currencyChange: Double?
     let changePercentage: Double?
+}
+
+extension PorfolioItemInfoModel {
     
     init(exchangeInfo: ExchangeRateModel, btcValue: Double) {
         self.currency = exchangeInfo.currency
