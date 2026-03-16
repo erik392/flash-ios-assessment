@@ -21,7 +21,7 @@ struct PortfolioView: View {
             lastUpdatedSection
         }
         .task {
-            await viewModel.submitBTC()
+            await viewModel.initialLoadBTC()
         }
         .overlay {
             if viewModel.isLoading {
@@ -96,7 +96,9 @@ private extension PortfolioView {
             .padding(.vertical, 4)
         }
         .refreshable {
-            await viewModel.submitBTC()
+            Task {
+                await viewModel.refreshBTC()
+            }
         }
     }
 
