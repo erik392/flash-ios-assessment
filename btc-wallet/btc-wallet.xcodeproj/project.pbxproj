@@ -19,12 +19,24 @@
 /* Begin PBXFileReference section */
 		D41D5D862F604C910015C8B1 /* btc-wallet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "btc-wallet.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D41D5D982F604C920015C8B1 /* btc-walletTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "btc-walletTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		D41D5E9E2F6865CA0015C8B1 /* btc-wallet.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "btc-wallet.xctestplan"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		D41D5E9F2F686E730015C8B1 /* Exceptions for "btc-wallet" folder in "btc-wallet" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"btc-wallet.xctestplan",
+			);
+			target = D41D5D852F604C910015C8B1 /* btc-wallet */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		D41D5D882F604C910015C8B1 /* btc-wallet */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				D41D5E9F2F686E730015C8B1 /* Exceptions for "btc-wallet" folder in "btc-wallet" target */,
+			);
 			path = "btc-wallet";
 			sourceTree = "<group>";
 		};
@@ -56,7 +68,6 @@
 		D41D5D7D2F604C910015C8B1 = {
 			isa = PBXGroup;
 			children = (
-				D41D5E9E2F6865CA0015C8B1 /* btc-wallet.xctestplan */,
 				D41D5D882F604C910015C8B1 /* btc-wallet */,
 				D41D5D9B2F604C920015C8B1 /* btc-walletTests */,
 				D41D5D872F604C910015C8B1 /* Products */,
