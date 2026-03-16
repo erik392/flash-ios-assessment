@@ -17,6 +17,7 @@ protocol FixerClient {
 final class FixerAPIClient: FixerClient {
 
     private let networkManager = NetworkManager()
+    private let apiKey = "5bW0rqijfSlsyuPzF8nxGT2GWZLRSMTY"
 
     func getExchangeRates(base: String, symbols: [String]) async throws -> ExchangeRatesResponse {
         
@@ -27,7 +28,7 @@ final class FixerAPIClient: FixerClient {
             URLQueryItem(name: "symbols", value: symbols.joined(separator: "%2C"))
         ]
 
-        return try await networkManager.fetchRequest(url: components?.url, headers: ["apikey" : "5bW0rqijfSlsyuPzF8nxGT2GWZLRSMTY"], errorType: FixerAPIErrorResponse.self)
+        return try await networkManager.fetchRequest(url: components?.url, headers: ["apikey" : apiKey], errorType: FixerAPIErrorResponse.self)
     }
     
     func getExchangeFluctuations(base: String, symbols: [String], fromDate: Date, toDate: Date) async throws -> ExchangeFluctuationsResponse {
@@ -41,6 +42,6 @@ final class FixerAPIClient: FixerClient {
             URLQueryItem(name: "end_date", value: toDate.formatForAPI())
         ]
 
-        return try await networkManager.fetchRequest(url: components?.url, headers: ["apikey" : "5bW0rqijfSlsyuPzF8nxGT2GWZLRSMTY"], errorType: FixerAPIErrorResponse.self)
+        return try await networkManager.fetchRequest(url: components?.url, headers: ["apikey" : apiKey], errorType: FixerAPIErrorResponse.self)
     }
 }
