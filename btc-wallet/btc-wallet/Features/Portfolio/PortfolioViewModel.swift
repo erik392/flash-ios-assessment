@@ -26,6 +26,7 @@ class PortfolioViewModel: ObservableObject {
         }
     }
     @Published var isLoading: Bool = false
+    @Published var showLoadingIndicator = false
     @Published var showError: Bool = false
     
     init(apiClient: FixerClient,
@@ -53,43 +54,50 @@ class PortfolioViewModel: ObservableObject {
     
     func initialLoadBTC() async {
         loadBTC()
-        
-        if let amount = Double(btcAmount),
-           amount != 0.0 {
-            guard !isLoading else { return }
-            isLoading = true
-            defer { isLoading = false }
-            await fetchCurrencyValues()
+        if let amount = Double(btcAmount), amount != 0 {
+            await updateBTC(showOverlay: true)
         }
-    }
-    
-    func refreshBTC() async {
-        guard !btcAmount.isEmpty && btcAmount.first != "." && btcAmount.last != "." else {
-            btcAmount = ""
-            errorMessage = "Enter a valid amount of BTC"
-            showError = true
-            return
-        }
-        
-        saveBTC()
-        
-        await fetchCurrencyValues()
     }
     
     func submitBTC() async {
-        guard !btcAmount.isEmpty && btcAmount.first != "." && btcAmount.last != "." else {
+        guard validateBTC() else { return }
+        saveBTC()
+        await updateBTC(showOverlay: true)
+    }
+    
+    func refreshBTC() async {
+        guard validateBTC() else { return }
+        saveBTC()
+        await updateBTC(showOverlay: false)
+    }
+    
+    private func validateBTC() -> Bool {
+        guard !btcAmount.isEmpty,
+              btcAmount.first != ".",
+              btcAmount.last != "."
+        else {
             btcAmount = ""
             errorMessage = "Enter a valid amount of BTC"
             showError = true
-            return
+            return false
         }
-
-        saveBTC()
         
+        return true
+    }
+    
+    private func updateBTC(showOverlay: Bool) async {
         guard !isLoading else { return }
+        
+        if showOverlay {
+            showLoadingIndicator = true
+        }
+        
         isLoading = true
-        defer { isLoading = false }
-
+        defer {
+            isLoading = false
+            showLoadingIndicator = false
+        }
+        
         await fetchCurrencyValues()
     }
     

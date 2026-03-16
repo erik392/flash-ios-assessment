@@ -24,7 +24,7 @@ struct PortfolioView: View {
             await viewModel.initialLoadBTC()
         }
         .overlay {
-            if viewModel.isLoading {
+            if viewModel.showLoadingIndicator {
                 ProgressView()
                     .scaleEffect(1.5)
             }
