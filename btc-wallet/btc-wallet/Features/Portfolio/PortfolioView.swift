@@ -21,7 +21,13 @@ struct PortfolioView: View {
             lastUpdatedSection
         }
         .task {
-            await viewModel.fetchCurrencyValues()
+            await viewModel.submitBTC()
+        }
+        .overlay {
+            if viewModel.isLoading {
+                ProgressView()
+                    .scaleEffect(1.5)
+            }
         }
         .alert(
             "Error",
@@ -55,8 +61,9 @@ private extension PortfolioView {
                     ToolbarItemGroup(placement: .keyboard) {
                         Spacer()
                         Button("Done") {
+                            isInputActive = false
                             Task {
-                                await viewModel.fetchCurrencyValues()
+                                await viewModel.submitBTC()
                             }
                         }
                         .disabled(viewModel.isLoading)
@@ -89,7 +96,7 @@ private extension PortfolioView {
             .padding(.vertical, 4)
         }
         .refreshable {
-            await viewModel.fetchCurrencyValues()
+            await viewModel.submitBTC()
         }
     }
 

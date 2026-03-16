@@ -13,14 +13,16 @@ class PortfolioViewModel: ObservableObject {
     
     private let apiClient: FixerClient
     private let repository: PortfolioRepositoryType
-    private var btcBalance: Double?
     
     @Published var exchangeInfo: ExchangeRateInfoModel?
     @Published var errorMessage: String?
     @Published var btcAmount: String = "" {
         didSet {
-//            btcAmount = sanitizeBTCInput(btcAmount)
-            saveBTC()
+            let filtered = btcAmount.filter { $0.isNumber || $0 == "." }
+            
+            if btcAmount != filtered {
+                btcAmount = filtered
+            }
         }
     }
     @Published var isLoading: Bool = false
@@ -49,11 +51,49 @@ class PortfolioViewModel: ObservableObject {
             .sorted { ($0.currency ?? "") < ($1.currency ?? "") }
     }
     
-    func fetchCurrencyValues() async {
+    func initialLoadBTC() async {
+        loadBTC()
+        
+        if let amount = Double(btcAmount),
+           amount != 0.0 {
+            guard !isLoading else { return }
+            isLoading = true
+            defer { isLoading = false }
+            await fetchCurrencyValues()
+        }
+    }
+    
+    func refreshBTC() async {
+        guard !btcAmount.isEmpty && btcAmount.first != "." && btcAmount.last != "." else {
+            btcAmount = ""
+            errorMessage = "Enter a valid amount of BTC"
+            showError = true
+            return
+        }
+        
+        saveBTC()
+        
+        await fetchCurrencyValues()
+    }
+    
+    func submitBTC() async {
+        guard !btcAmount.isEmpty && btcAmount.first != "." && btcAmount.last != "." else {
+            btcAmount = ""
+            errorMessage = "Enter a valid amount of BTC"
+            showError = true
+            return
+        }
+
+        saveBTC()
+        
         guard !isLoading else { return }
         isLoading = true
         defer { isLoading = false }
-        
+
+        await fetchCurrencyValues()
+    }
+    
+    private func fetchCurrencyValues() async {
         Task {
             do {
                 let base = "BTC"
@@ -82,7 +122,7 @@ class PortfolioViewModel: ObservableObject {
         }
     }
     
-    func loadBTC() {
+    private func loadBTC() {
         do {
             if let value = try repository.fetchBTCValue() {
                 print("Successful fetch, value: \(value)")
@@ -90,18 +130,6 @@ class PortfolioViewModel: ObservableObject {
             }
         } catch {
             print("Failed to fetch BTC value:", error)
-        }
-    }
-    
-    func sanitizeBTCInput(_ value: String) -> String {
-        let filtered = value.filter { "0123456789.".contains($0) }
-        var hasDecimal = false
-        return filtered.filter { char in
-            if char == "." {
-                defer { hasDecimal = true }
-                return !hasDecimal
-            }
-            return true
         }
     }
 
